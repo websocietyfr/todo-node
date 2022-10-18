@@ -5,8 +5,12 @@ const sqlite3 = require("sqlite3");
 const format = require("date-fns/format");
 const isMatch = require("date-fns/isMatch");
 var isValid = require("date-fns/isValid");
+const cors = require('cors');
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: '*'
+}));
 
 let database;
 const initializeDBandServer = async () => {
@@ -270,9 +274,9 @@ app.post("/todos/", async (request, response) => {
           const postNewDueDate = format(new Date(dueDate), "yyyy-MM-dd");
           const postTodoQuery = `
   INSERT INTO
-    todo (id, todo, category,priority, status, due_date)
+    todo (todo, category,priority, status, due_date)
   VALUES
-    (${id}, '${todo}', '${category}','${priority}', '${status}', '${postNewDueDate}');`;
+    ('${todo}', '${category}','${priority}', '${status}', '${postNewDueDate}');`;
           await database.run(postTodoQuery);
           //console.log(responseResult);
           response.send("Todo Successfully Added");
